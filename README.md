@@ -49,6 +49,8 @@ cd /path/to/your/project
 pyenv local 3.12.6
 ```
 
+### See more about [Environment setup](docs/ENVIRONMENT_SETUP_EN.md) and in portuguese [Ambiente de configuração](docs/ENVIRONMENT_SETUP.md). See also about [Package management](docs/PACKAGE_MANAGEMENT_EN.md) and portuguese version [Gerenciamento de pacotes](docs/PACKAGE_MANAGEMENT.md)
+
 ### 2. Virtual Environment Creation
 
 ```bash
