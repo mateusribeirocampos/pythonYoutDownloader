@@ -1,198 +1,359 @@
 # YouTube Video Downloader
 
+<div align="center">
+  
 ![Python Youtube downloader](assets/pythonYout.png)
 
-A simple and efficient YouTube video downloader using Python and yt-dlp.
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Type Checker: mypy](https://img.shields.io/badge/type%20checker-mypy-blue.svg)](https://mypy.readthedocs.io/)
+[![Linting: flake8](https://img.shields.io/badge/linting-flake8-blue.svg)](https://flake8.pycqa.org/)
+[![Testing: pytest](https://img.shields.io/badge/testing-pytest-green.svg)](https://docs.pytest.org/)
+[![Packaging: pyproject.toml](https://img.shields.io/badge/packaging-pyproject.toml-orange.svg)](https://peps.python.org/pep-0518/)
+[![Maintained](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/mateusribeirocampos/pythonYoutDownloader/graphs/commit-activity)
 
-## Description
+**A professional, interactive YouTube video downloader built with Python and yt-dlp**
 
-This project allows downloading YouTube videos with configurable quality. It uses the `yt-dlp` library, which is a maintained and improved version of `youtube-dl`.
+*Simple • Fast • Reliable*
 
-## Features
+</div>
 
-- Download YouTube videos with quality up to 720p
-- Extract video information (title, duration, views)
-- Robust error handling
-- Simple command-line interface
+---
 
-## Prerequisites
+## 🌟 Features
 
-- Python 3.8 or higher
-- pyenv (recommended for Python version management)
-- pip or uv for package management
+- **🎯 Interactive Terminal Interface** - User-friendly step-by-step process
+- **✅ Smart URL Validation** - Validates YouTube URLs with proper error handling
+- **📹 Quality Selection** - Choose from available video formats and resolutions
+- **📁 Flexible Output** - Select custom download directory with auto-creation
+- **📊 Video Information** - Display title, duration, views, and channel info
+- **🛡️ Robust Error Handling** - Comprehensive error management and user feedback
+- **🏗️ Professional Architecture** - Clean, maintainable, and tested codebase
 
-## Installation and Setup
+---
 
-### 1. Python Environment Setup with pyenv
+## 🚀 Quick Start
 
-If you don't have pyenv installed:
+### Prerequisites
 
-```bash
-# macOS
-brew install pyenv
+- **Python 3.8+** - [Download Python](https://python.org/downloads/)
+- **Git** - [Install Git](https://git-scm.com/downloads)
 
-# Linux
-curl https://pyenv.run | bash
-```
-
-Configure a specific Python version:
-
-```bash
-# Install Python 3.12.6
-pyenv install 3.12.6
-
-# Set as global version (optional)
-pyenv global 3.12.6
-
-# Set as local version for this project
-cd /path/to/your/project
-pyenv local 3.12.6
-```
-
-### See more
-
-- [Environment setup](docs/ENVIRONMENT_SETUP_EN.md)
-- [Package management](docs/PACKAGE_MANAGEMENT_EN.md)
-
-Portuguese version
-
-- [Ambiente de configuração](docs/ENVIRONMENT_SETUP.md)
-- [Gerenciamento de pacotes](docs/PACKAGE_MANAGEMENT.md)
-
-### 2. Virtual Environment Creation
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/mateusribeirocampos/pythonYoutDownloader.git
+cd pythonYoutDownloader
+
 # Create virtual environment
-python3 -m venv venv
+python -m venv venv
 
 # Activate virtual environment
-# macOS/Linux:
+# On macOS/Linux:
 source venv/bin/activate
-
-# Windows:
+# On Windows:
 # venv\\Scripts\\activate
+
+# Install dependencies
+make install
+# Or manually: pip install -r requirements.txt
 ```
 
-### 3. Dependencies Installation
-
-With pip:
+### Usage
 
 ```bash
-pip install yt-dlp
-```
-
-With uv (faster):
-
-```bash
-# Install uv first
-pip install uv
-
-# Install dependencies with uv
-uv pip install yt-dlp
-```
-
-## Usage
-
-### Basic Usage
-
-```python
-from src.youtube_downloader import download_video
-
-# Download a video
-url = "https://www.youtube.com/watch?v=VIDEO_ID"
-download_video(url)
-```
-
-### Run Script Directly
-
-```bash
-# Activate virtual environment
-source venv/bin/activate
-
-# Run the script
+# Run the interactive downloader
 python src/youtube_downloader.py
+
+# Or use make command
+make run
 ```
 
-### Customization
+---
 
-To modify the video URL, edit the `video_url` variable in the `src/youtube_downloader.py` file:
+## 📖 How It Works
 
-```python
-video_url = 'https://www.youtube.com/watch?v=YOUR_URL_HERE'
-```
+The application guides you through a **3-step process**:
 
-## Project Structure
+### Step 1: Video URL
+
+- Enter a YouTube URL
+- Automatic validation and error checking
+- Support for various YouTube URL formats
+
+### Step 2: Video Format
+
+- View available quality options
+- Select desired resolution
+- Optimized format selection
+
+### Step 3: Output Directory
+
+- Choose download location
+- Automatic directory creation
+- Path validation and confirmation
+
+### Download Summary
+
+- Review all settings before download
+- Confirmation prompt
+- Real-time download progress
+
+---
+
+## 🏗️ Project Structure
 
 ```bash
-vyout/
-├── README.md               # This file
-├── requirements.txt        # Dependencies
-├── .python-version        # Python version (pyenv)
-├── docs/                  # 📚 Detailed documentation
-│   ├── ENVIRONMENT_SETUP.md     # Portuguese setup guide
-│   ├── ENVIRONMENT_SETUP_EN.md  # English setup guide
-│   ├── PACKAGE_MANAGEMENT.md    # Portuguese package guide
-│   └── PACKAGE_MANAGEMENT_EN.md # English package guide
-├── src/                   # 🎯 Main code
-│   └── youtube_downloader.py    # Core downloader functionality
-├── tests/                 # 🧪 Tests (prepared for future)
-└── venv/                  # 🏠 Virtual environment
+youtube-video-downloader/
+├── 📄 README.md                 # Project documentation
+├── ⚙️ pyproject.toml           # Modern Python packaging
+├── 📦 requirements.txt         # Production dependencies  
+├── 🛠️ requirements-dev.txt     # Development dependencies
+├── 🔨 Makefile                 # Build automation
+├── 🚫 .gitignore              # Git ignore patterns
+│
+├── 📁 src/                     # Source code
+│   ├── 🔧 __init__.py         # Package initialization
+│   └── 🎯 youtube_downloader.py # Main application
+│
+├── 🧪 tests/                  # Test suite
+│   ├── 🔧 __init__.py         # Test package init
+│   ├── ✅ test_downloader.py  # Unit tests
+│   └── 🎮 demo.py             # Demo script
+│
+├── 📚 docs/                   # Documentation
+│   ├── 🌍 ENVIRONMENT_SETUP_EN.md
+│   ├── 🇧🇷 ENVIRONMENT_SETUP.md  
+│   ├── 🌍 PACKAGE_MANAGEMENT_EN.md
+│   └── 🇧🇷 PACKAGE_MANAGEMENT.md
+│
+└── 🎨 assets/                 # Static assets
+    └── pythonYout.png
 ```
 
-## Available Configurations
+---
 
-The script allows customizing various yt-dlp options:
+## 💻 Development
 
-```python
-ydl_opts = {
-    'format': 'best[height<=720]',  # Maximum quality 720p
-    'outtmpl': '%(title)s.%(ext)s',  # File name
-    'writesubtitles': True,          # Download subtitles
-    'writeautomaticsub': True,       # Automatic subtitles
-}
-```
-
-## Troubleshooting
-
-### Import Error
-
-If you receive `ModuleNotFoundError: No module named 'yt_dlp'`:
-
-1. Check if the virtual environment is active
-2. Reinstall the dependency: `pip install yt-dlp`
-
-### Download Issues
-
-- Check if the URL is valid
-- Some videos may have geographical restrictions
-- Private videos cannot be downloaded
-
-### Performance
-
-For faster downloads, consider using `uv` instead of `pip`:
+### Setup Development Environment
 
 ```bash
-# Install uv
-pip install uv
+# Install development dependencies
+make install-dev
 
-# Use uv for future installations
-uv pip install package-name
+# Run tests
+make test
+
+# Format code
+make format
+
+# Run linting
+make lint
+
+# Type checking
+make type-check
 ```
 
-## Contributing
+### Available Make Commands
 
-1. Fork the project
-2. Create a branch for your feature
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
+| Command | Description |
+|---------|-------------|
+| `make install` | Install production dependencies |
+| `make install-dev` | Install development dependencies |
+| `make test` | Run test suite |
+| `make run` | Run the application |
+| `make format` | Format code with Black |
+| `make lint` | Run flake8 linting |
+| `make type-check` | Run mypy type checking |
+| `make clean` | Clean build artifacts |
+| `make build` | Build distribution package |
 
-## License
+---
 
-This project is for educational use. Respect YouTube's terms of service when using this software.
+## 🧪 Testing
 
-## Legal Notices
+```bash
+# Run all tests
+python tests/test_downloader.py
 
-- Use only for content you have permission to download
-- Respect copyrights
-- This software is provided "as is", without warranties
+# Run demo
+python tests/demo.py
+
+# Or use pytest (if installed)
+pytest tests/
+```
+
+### Test Coverage
+
+- ✅ URL validation testing
+- ✅ Edge case handling
+- ✅ Import verification
+- ✅ Integration demos
+
+---
+
+## 📝 API Reference
+
+### Core Functions
+
+```python
+from src.youtube_downloader import download_video, validate_youtube_url
+
+# Validate YouTube URL
+is_valid = validate_youtube_url("https://www.youtube.com/watch?v=VIDEO_ID")
+
+# Download video
+success = download_video(
+    url="https://www.youtube.com/watch?v=VIDEO_ID",
+    output_path="./downloads",
+    format_selector="best[height<=720]"
+)
+```
+
+### Configuration Options
+
+```python
+# yt-dlp format selectors
+'best'                    # Best quality available
+'best[height<=720]'       # Max 720p quality
+'best[height<=1080]'      # Max 1080p quality
+'worst'                   # Lowest quality
+```
+
+---
+
+## 🛡️ Error Handling
+
+The application includes comprehensive error handling for:
+
+- **Invalid URLs** - Clear validation messages
+- **Network Issues** - Retry suggestions and troubleshooting
+- **Permission Errors** - Directory creation and file access
+- **Video Restrictions** - Geo-blocking and private videos
+- **Format Unavailability** - Fallback options
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+### Development Guidelines
+
+- Follow **PEP 8** style guidelines
+- Add **type hints** to all functions
+- Write **comprehensive docstrings**
+- Include **unit tests** for new features
+- Update **documentation** as needed
+
+---
+
+## 📋 Requirements
+
+### Runtime Dependencies
+
+- `yt-dlp>=2023.1.6` - YouTube video downloading
+
+### Development Dependencies
+
+- `pytest>=7.0.0` - Testing framework
+- `black>=22.0.0` - Code formatting
+- `flake8>=4.0.0` - Code linting
+- `mypy>=0.950` - Type checking
+
+---
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| `ModuleNotFoundError: No module named 'yt_dlp'` | Run `pip install yt-dlp` in activated virtual environment |
+| `Permission denied` when creating directory | Check write permissions or run with appropriate privileges |
+| `Video unavailable` | Check if video is public and accessible in your region |
+| `Invalid URL` error | Ensure URL follows YouTube format patterns |
+
+### Getting Help
+
+- 📖 Check our [documentation](docs/)
+- 🐛 [Report bugs](https://github.com/mateusribeirocampos/pythonYoutDownloader/issues)
+- 💡 [Request features](https://github.com/mateusribeirocampos/pythonYoutDownloader/issues)
+- 💬 [Start discussions](https://github.com/mateusribeirocampos/pythonYoutDownloader/discussions)
+
+---
+
+## ⚖️ Legal & Ethics
+
+### Important Notice
+
+This software is intended for **educational purposes** and **personal use** only.
+
+### Terms of Use
+
+- ✅ **Personal backups** of your own content
+- ✅ **Educational content** with proper permissions  
+- ✅ **Public domain** videos
+- ❌ **Copyrighted material** without permission
+- ❌ **Commercial redistribution**
+- ❌ **Terms of service violations**
+
+### Responsibility
+
+**Users are solely responsible** for ensuring their use complies with:
+
+- YouTube's Terms of Service
+- Local copyright laws
+- Content creator rights
+- Platform guidelines
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+```bash
+MIT License - Copyright (c) 2025 YouTube Video Downloader Team
+Permission is hereby granted, free of charge, to any person obtaining a copy...
+```
+
+---
+
+## 🙏 Acknowledgments
+
+- **[yt-dlp](https://github.com/yt-dlp/yt-dlp)** - Powerful video downloading library
+- **Python Community** - For excellent tooling and libraries
+- **Contributors** - Thank you for your valuable contributions
+
+---
+
+## 📊 Project Stats
+
+<div align="center">
+
+![GitHub repo size](https://img.shields.io/github/repo-size/mateusribeirocampos/pythonYoutDownloader)
+![GitHub code size](https://img.shields.io/github/languages/code-size/mateusribeirocampos/pythonYoutDownloader)
+![GitHub top language](https://img.shields.io/github/languages/top/mateusribeirocampos/pythonYoutDownloader)
+
+**Made with ❤️ by the YouTube Video Downloader Team**
+
+</div>
+
+---
+
+<div align="center">
+  
+### ⭐ Star this repository if you found it helpful!
+
+[⬆️ Back to Top](#youtube-video-downloader)
+
+</div>
