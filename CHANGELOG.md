@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-08-20
 
 ### Added
+
 - 🎯 Interactive terminal-based YouTube video downloader
 - ✅ Smart URL validation with comprehensive error handling
 - 📹 Dynamic video format selection with quality options
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 📋 Professional README with detailed instructions
 
 ### Technical Features
+
 - Python 3.8+ compatibility
 - Type hints throughout codebase
 - Comprehensive docstrings
@@ -34,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MIT License
 
 ### Architecture
+
 - Clean separation of concerns
 - Modular function design
 - Proper package structure with __init__.py files
@@ -42,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Professional project organization
 
 ### Documentation
+
 - Detailed README with badges and professional formatting
 - API reference with code examples
 - Troubleshooting guide
@@ -53,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned Features
+
 - [ ] Batch download support
 - [ ] Configuration file support
 - [ ] Audio-only download option
@@ -67,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version History
 
 - **1.0.0** - Initial release with full interactive functionality
+
 - **0.x.x** - Development versions (pre-release)
 
 ---
@@ -78,6 +84,7 @@ This is the initial release, so no migration is necessary.
 ## Support
 
 For support, bug reports, and feature requests, please visit:
+
 - [GitHub Issues](https://github.com/mateusribeirocampos/pythonYoutDownloader/issues)
 - [GitHub Discussions](https://github.com/mateusribeirocampos/pythonYoutDownloader/discussions)
 
