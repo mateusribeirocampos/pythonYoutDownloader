@@ -10,7 +10,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.youtube_downloader import download_video, detect_platform, test_video_url
+from src.universal_video_downloader import download_video, detect_platform, test_video_url
 
 def example_segmented_download():
     """Example of downloading a segmented video."""

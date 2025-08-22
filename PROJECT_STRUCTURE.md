@@ -16,7 +16,7 @@ pythonYoutDownloader/
 │
 ├── src/                      # Source code package
 │   ├── __init__.py          # Package initialization
-│   └── youtube_downloader.py # Main application code
+│   └── universal_video_downloader.py # Main application code
 │
 ├── tests/                   # Test package
 │   ├── __init__.py         # Test package initialization
@@ -92,7 +92,7 @@ make run
 make install
 
 # Run the application
-python src/youtube_downloader.py
+python src/universal_video_downloader.py
 ```
 
 This structure follows Python packaging best practices and enables easy maintenance, testing, and distribution.

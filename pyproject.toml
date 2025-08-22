@@ -3,16 +3,16 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "youtube-video-downloader"
-version = "1.0.0"
-description = "A simple and efficient YouTube video downloader using Python and yt-dlp"
+name = "universal-video-downloader"
+version = "2.0.0"
+description = "A simple and efficient universal video downloader using Python and yt-dlp. Supports YouTube, Vimeo, HLS/DASH streams, and segmented videos."
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [
-    {name = "YouTube Downloader Team", email = "contact@example.com"},
+    {name = "Universal Video Downloader Team", email = "contact@example.com"},
 ]
-keywords = ["youtube", "downloader", "video", "yt-dlp"]
+keywords = ["video", "downloader", "youtube", "vimeo", "hls", "dash", "streaming", "yt-dlp", "universal"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: End Users/Desktop",
@@ -44,7 +44,7 @@ Repository = "https://github.com/mateusribeirocampos/pythonYoutDownloader.git"
 Issues = "https://github.com/mateusribeirocampos/pythonYoutDownloader/issues"
 
 [project.scripts]
-youtube-downloader = "src.youtube_downloader:main"
+universal-video-downloader = "src.universal_video_downloader:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

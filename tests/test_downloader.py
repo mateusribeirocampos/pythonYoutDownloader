@@ -10,7 +10,7 @@ import os
 # Add src directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from youtube_downloader import validate_youtube_url
+from universal_video_downloader import validate_youtube_url
 
 class TestYouTubeDownloader:
     """Test class for YouTube downloader functions"""
@@ -95,7 +95,7 @@ def test_import():
     print("🧪 Testing imports...")
     
     try:
-        from youtube_downloader import (
+        from universal_video_downloader import (
             validate_youtube_url,
             get_available_formats,
             get_user_input_url,
@@ -122,4 +122,4 @@ if __name__ == "__main__":
     
     print("\n🎉 All tests completed successfully!")
     print("📋 Program is ready for interactive use.")
-    print("💡 Run 'python src/youtube_downloader.py' to use interactively.")
+    print("💡 Run 'python src/universal_video_downloader.py' to use interactively.")

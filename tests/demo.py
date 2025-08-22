@@ -10,7 +10,7 @@ import os
 # Add src directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from youtube_downloader import validate_youtube_url, get_available_formats
+from universal_video_downloader import validate_youtube_url, get_available_formats
 
 def demo_functionality():
     """Demonstrate the downloader functionality"""

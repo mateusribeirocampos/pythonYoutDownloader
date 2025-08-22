@@ -10,7 +10,7 @@ help:
 	@echo "  format      - Format code (black)"
 	@echo "  type-check  - Run type checking (mypy)"
 	@echo "  clean       - Clean build artifacts"
-	@echo "  run         - Run the YouTube downloader"
+	@echo "  run         - Run the Universal Video downloader"
 
 # Install production dependencies
 install:
@@ -46,7 +46,7 @@ clean:
 
 # Run the application
 run:
-	python src/youtube_downloader.py
+	python src/universal_video_downloader.py
 
 # Build package
 build:
