@@ -1,8 +1,8 @@
-# YouTube Video Downloader
+# Universal Video Downloader
 
 <div align="center">
   
-![Python Youtube downloader](assets/pythonYout.png)
+![Python Universal Video Downloader](assets/pythonYout.png)
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -13,9 +13,9 @@
 [![Packaging: pyproject.toml](https://img.shields.io/badge/packaging-pyproject.toml-orange.svg)](https://peps.python.org/pep-0518/)
 [![Maintained](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/mateusribeirocampos/pythonYoutDownloader/graphs/commit-activity)
 
-**A professional, interactive YouTube video downloader built with Python and yt-dlp**
+**A professional, interactive universal video downloader built with Python and yt-dlp**
 
-*Simple • Fast • Reliable*
+*Supports YouTube, Vimeo, HLS/DASH streams, and Chunked/Segmented Videos*
 
 </div>
 
@@ -24,12 +24,24 @@
 ## 🌟 Features
 
 - **🎯 Interactive Terminal Interface** - User-friendly step-by-step process
-- **✅ Smart URL Validation** - Validates YouTube URLs with proper error handling
+- **🔗 Universal URL Support** - YouTube, Vimeo, HLS (.m3u8), DASH (.mpd), and direct video URLs
+- **🧩 Segmented Video Support** - Automatic detection and download of chunked/segmented videos
 - **📹 Quality Selection** - Choose from available video formats and resolutions
 - **📁 Flexible Output** - Select custom download directory with auto-creation
 - **📊 Video Information** - Display title, duration, views, and channel info
+- **🔄 Retry Mechanism** - Automatic retry for failed segments and downloads
+- **📈 Progress Tracking** - Real-time progress for both regular and segmented downloads
+- **✅ URL Testing** - Pre-download validation to ensure video accessibility
 - **🛡️ Robust Error Handling** - Comprehensive error management and user feedback
 - **🏗️ Professional Architecture** - Clean, maintainable, and tested codebase
+
+### 🆕 New in v2.0
+- **🔗 Chunked/Segmented Video Downloads** - Handle videos delivered in chunks/fragments
+- **🌐 Generic URL Support** - Download from any video URL with embedded content
+- **⚡ Enhanced Streaming** - Optimized for HLS (.m3u8) and DASH (.mpd) formats
+- **🔍 Smart Detection** - Automatic platform and format detection
+- **📦 Vimeo CDN Support** - Download individual chunks from Vimeo CDN URLs
+- **🎯 Embed Page Support** - Extract videos from embed pages automatically
 
 ---
 
@@ -79,15 +91,15 @@ The application guides you through a **3-step process**:
 
 ### Step 1: Video URL
 
-- Enter a YouTube URL
-- Automatic validation and error checking
-- Support for various YouTube URL formats
+- Enter a video URL (YouTube, Vimeo, or any embed page)
+- Automatic validation and platform detection
+- Support for chunked/segmented videos and streaming formats
 
 ### Step 2: Video Format
 
-- View available quality options
-- Select desired resolution
-- Optimized format selection
+- View available quality options and formats
+- Automatic detection of HLS/DASH segmented formats
+- Optimized format selection for chunked videos
 
 ### Step 3: Output Directory
 
@@ -121,7 +133,9 @@ youtube-video-downloader/
 ├── 🧪 tests/                  # Test suite
 │   ├── 🔧 __init__.py         # Test package init
 │   ├── ✅ test_downloader.py  # Unit tests
-│   └── 🎮 demo.py             # Demo script
+│   ├── 🎮 demo.py             # Demo script
+│   ├── 🔍 test_problematic_videos.py # Problematic video testing
+│   └── 📺 test_segmented_video.py    # Segmented video testing
 │
 ├── 📚 docs/                   # Documentation
 │   ├── 🌍 ENVIRONMENT_SETUP_EN.md
@@ -178,8 +192,17 @@ make type-check
 # Run all tests
 python tests/test_downloader.py
 
+# Test segmented video functionality
+python tests/test_segmented_video.py
+
+# Test problematic video handling
+python tests/test_problematic_videos.py
+
 # Run demo
 python tests/demo.py
+
+# Run example scripts
+python examples/segmented_video_example.py
 
 # Or use pytest (if installed)
 pytest tests/
@@ -188,6 +211,8 @@ pytest tests/
 ### Test Coverage
 
 - ✅ URL validation testing
+- ✅ Segmented video download testing
+- ✅ Problematic video handling
 - ✅ Edge case handling
 - ✅ Import verification
 - ✅ Integration demos
@@ -204,11 +229,18 @@ from src.youtube_downloader import download_video, validate_youtube_url
 # Validate YouTube URL
 is_valid = validate_youtube_url("https://www.youtube.com/watch?v=VIDEO_ID")
 
-# Download video
+# Download video (supports YouTube, Vimeo, HLS, and segmented videos)
 success = download_video(
-    url="https://www.youtube.com/watch?v=VIDEO_ID",
+    url="https://www.youtube.com/watch?v=VIDEO_ID",  # or any supported URL
     output_path="./downloads",
     format_selector="best[height<=720]"
+)
+
+# Example with segmented video
+success = download_video(
+    url="https://videoaddress.com.br/aula-123",  # Generic embed page
+    output_path="./downloads",
+    format_selector="best"  # Automatically handles HLS/DASH formats
 )
 ```
 

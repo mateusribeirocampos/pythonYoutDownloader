@@ -1,219 +1,219 @@
-# Gerenciamento de Pacotes Python: pip vs uv (Local vs Global)
+# Python Package Management: pip vs uv (Local vs Global)
 
-Guia completo sobre gerenciamento de pacotes Python, diferenças entre instalação local e global, e como usar pip e uv eficientemente.
+Complete guide on Python package management, differences between local and global installation, and how to use pip and uv efficiently.
 
-## 1. Conceitos Fundamentais
+## 1. Fundamental Concepts
 
-### Instalação Global vs Local
+### Global vs Local Installation
 
-**Global (Sistema):**
+**Global (System):**
 
-- Pacotes instalados para todos os projetos
-- Localizado em: `/Users/usuario/.pyenv/versions/3.12.6/lib/python3.12/site-packages/`
-- Problemas: conflitos de versão, dependências conflitantes
+- Packages installed for all projects
+- Located at: `/Users/user/.pyenv/versions/3.12.6/lib/python3.12/site-packages/`
+- Problems: version conflicts, conflicting dependencies
 
-**Local (Ambiente Virtual):**
+**Local (Virtual Environment):**
 
-- Pacotes isolados por projeto
-- Localizado em: `venv/lib/python3.12/site-packages/`
-- Vantagens: isolamento, versões específicas, sem conflitos
+- Packages isolated per project
+- Located at: `venv/lib/python3.12/site-packages/`
+- Advantages: isolation, specific versions, no conflicts
 
-## 2. pip - Gerenciador Tradicional
+## 2. pip - Traditional Manager
 
-### Comandos Básicos
+### Basic Commands
 
 ```bash
-# Verificar versão
+# Check version
 pip --version
 
-# Instalar pacote
-pip install nome-do-pacote
+# Install package
+pip install package-name
 
-# Instalar versão específica
-pip install nome-do-pacote==1.2.3
+# Install specific version
+pip install package-name==1.2.3
 
-# Instalar com restrição de versão
-pip install 'nome-do-pacote>=1.0,<2.0'
+# Install with version constraints
+pip install 'package-name>=1.0,<2.0'
 
-# Listar pacotes instalados
+# List installed packages
 pip list
 
-# Mostrar informações de um pacote
-pip show nome-do-pacote
+# Show package information
+pip show package-name
 
-# Atualizar pacote
-pip install --upgrade nome-do-pacote
+# Update package
+pip install --upgrade package-name
 
-# Desinstalar pacote
-pip uninstall nome-do-pacote
+# Uninstall package
+pip uninstall package-name
 ```
 
-### Gerenciamento de Dependências
+### Dependency Management
 
 ```bash
-# Criar arquivo de dependências
+# Create dependencies file
 pip freeze > requirements.txt
 
-# Instalar de arquivo de dependências
+# Install from dependencies file
 pip install -r requirements.txt
 
-# Instalar em modo desenvolvimento (editável)
+# Install in development mode (editable)
 pip install -e .
 ```
 
-### Exemplo requirements.txt
+### Example requirements.txt
 
 ```txt
-# Dependências principais
+# Main dependencies
 yt-dlp==2025.7.21
 requests>=2.31.0,<3.0.0
 pydantic>=2.0.0
 
-# Dependências de desenvolvimento
+# Development dependencies
 pytest>=7.0.0
 black>=23.0.0
 flake8>=6.0.0
 mypy>=1.0.0
 ```
 
-## 3. uv - Gerenciador Moderno (Rápido)
+## 3. uv - Modern Manager (Fast)
 
-### Instalação do uv
+### uv Installation
 
 ```bash
-# Instalar uv
+# Install uv
 pip install uv
 
-# Ou via curl (Linux/macOS)
+# Or via curl (Linux/macOS)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### Comandos Básicos do uv
+### Basic uv Commands
 
 ```bash
-# Instalar pacote
-uv pip install nome-do-pacote
+# Install package
+uv pip install package-name
 
-# Instalar de requirements.txt
+# Install from requirements.txt
 uv pip install -r requirements.txt
 
-# Listar pacotes
+# List packages
 uv pip list
 
-# Desinstalar pacote
-uv pip uninstall nome-do-pacote
+# Uninstall package
+uv pip uninstall package-name
 
-# Criar ambiente virtual
+# Create virtual environment
 uv venv
 
-# Ativar ambiente (mesmo comando que python -m venv)
+# Activate environment (same command as python -m venv)
 source .venv/bin/activate  # Linux/macOS
 ```
 
-### Vantagens do uv
+### uv Advantages
 
-- **Velocidade**: 10-100x mais rápido que pip
-- **Compatibilidade**: API compatível com pip
-- **Cache inteligente**: reutiliza downloads
-- **Resolução melhor**: resolve dependências mais eficientemente
+- **Speed**: 10-100x faster than pip
+- **Compatibility**: pip-compatible API
+- **Smart cache**: reuses downloads
+- **Better resolution**: resolves dependencies more efficiently
 
-## 4. Comparação pip vs uv
+## 4. pip vs uv Comparison
 
-| Aspecto | pip | uv |
+| Aspect | pip | uv |
 |---------|-----|----|
-| Velocidade | Padrão | 10-100x mais rápido |
-| Compatibilidade | Nativo Python | Compatible com pip |
-| Cache | Básico | Avançado |
-| Resolução de deps | Lenta | Rápida e inteligente |
-| Tamanho binário | Incluso no Python | ~15MB |
-| Maturidade | Estável | Em desenvolvimento |
+| Speed | Standard | 10-100x faster |
+| Compatibility | Native Python | pip compatible |
+| Cache | Basic | Advanced |
+| Dependency resolution | Slow | Fast and intelligent |
+| Binary size | Included in Python | ~15MB |
+| Maturity | Stable | In development |
 
-## 5. Estratégias de Uso
+## 5. Usage Strategies
 
-### Desenvolvimento Local
+### Local Development
 
 ```bash
-# Criar projeto novo
-mkdir meu-projeto
-cd meu-projeto
+# Create new project
+mkdir my-project
+cd my-project
 
-# Configurar Python
+# Configure Python
 pyenv local 3.12.6
 
-# Criar ambiente virtual
+# Create virtual environment
 python -m venv venv
-# OU usando uv (mais rápido)
+# OR using uv (faster)
 uv venv
 
-# Ativar ambiente
+# Activate environment
 source venv/bin/activate
 
-# Instalar dependências
+# Install dependencies
 uv pip install -r requirements.txt
-# OU pip install -r requirements.txt
+# OR pip install -r requirements.txt
 ```
 
-### Workflow Recomendado
+### Recommended Workflow
 
 ```bash
-# 1. Sempre usar ambiente virtual
+# 1. Always use virtual environment
 python -m venv venv && source venv/bin/activate
 
-# 2. Atualizar pip/uv
+# 2. Update pip/uv
 pip install --upgrade pip uv
 
-# 3. Instalar dependências com uv (mais rápido)
-uv pip install nome-do-pacote
+# 3. Install dependencies with uv (faster)
+uv pip install package-name
 
-# 4. Salvar dependências
+# 4. Save dependencies
 pip freeze > requirements.txt
 
-# 5. Para desenvolvimento, separar dependências
+# 5. For development, separate dependencies
 echo "pytest>=7.0.0" >> requirements-dev.txt
 ```
 
-## 6. Gerenciamento de Versões
+## 6. Version Management
 
-### Especificação de Versões
+### Version Specification
 
 ```txt
-# requirements.txt - Exemplos de especificação
+# requirements.txt - Specification examples
 
-# Versão exata
+# Exact version
 yt-dlp==2025.7.21
 
-# Versão mínima
+# Minimum version
 requests>=2.31.0
 
-# Versão com limite superior
+# Version with upper limit
 numpy>=1.20.0,<2.0.0
 
-# Versão compatível (semver)
-fastapi~=0.100.0  # Equivale a >=0.100.0,<0.101.0
+# Compatible version (semver)
+fastapi~=0.100.0  # Equivalent to >=0.100.0,<0.101.0
 
-# Versão de desenvolvimento
+# Development version
 git+https://github.com/user/repo.git@branch
 
-# Pacote local editável
+# Local editable package
 -e .
 ```
 
-### Atualização de Dependências
+### Dependency Updates
 
 ```bash
-# Ver pacotes desatualizados
+# View outdated packages
 pip list --outdated
 
-# Atualizar específico
-pip install --upgrade nome-do-pacote
+# Update specific package
+pip install --upgrade package-name
 
-# Atualizar todos (cuidado!)
+# Update all (be careful!)
 pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
 ```
 
-## 7. Ambientes para Diferentes Casos de Uso
+## 7. Environments for Different Use Cases
 
-### Desenvolvimento
+### Development
 
 ```bash
 # requirements-dev.txt
@@ -225,16 +225,16 @@ mypy>=1.0.0
 pre-commit>=3.0.0
 ```
 
-### Produção
+### Production
 
 ```bash
-# requirements-prod.txt (versões fixas)
+# requirements-prod.txt (fixed versions)
 yt-dlp==2025.7.21
 requests==2.31.0
 pydantic==2.5.3
 ```
 
-### Testes
+### Testing
 
 ```bash
 # requirements-test.txt
@@ -244,26 +244,26 @@ pytest-cov==4.1.0
 pytest-mock==3.12.0
 ```
 
-## 8. Ferramentas Complementares
+## 8. Complementary Tools
 
-### pip-tools (Gerenciamento Avançado)
+### pip-tools (Advanced Management)
 
 ```bash
-# Instalar pip-tools
+# Install pip-tools
 pip install pip-tools
 
-# Criar requirements.in
+# Create requirements.in
 echo "yt-dlp" > requirements.in
 echo "requests>=2.31.0" >> requirements.in
 
-# Gerar requirements.txt com versões fixas
+# Generate requirements.txt with fixed versions
 pip-compile requirements.in
 
-# Atualizar dependências
+# Update dependencies
 pip-compile --upgrade requirements.in
 ```
 
-### pyproject.toml (Moderno)
+### pyproject.toml (Modern)
 
 ```toml
 [build-system]
@@ -286,72 +286,72 @@ dev = [
 ]
 ```
 
-## 9. Scripts de Automação
+## 9. Automation Scripts
 
-### Script de Setup Rápido
+### Quick Setup Script
 
 ```bash
 #!/bin/bash
 # setup.sh
 
-echo "Configurando ambiente Python..."
+echo "Setting up Python environment..."
 
-# Verificar se pyenv existe
+# Check if pyenv exists
 if ! command -v pyenv &> /dev/null; then
-    echo "pyenv não encontrado. Instale primeiro."
+    echo "pyenv not found. Please install first."
     exit 1
 fi
 
-# Configurar Python local
+# Configure local Python
 pyenv local 3.12.6
 
-# Criar ambiente virtual
+# Create virtual environment
 python -m venv venv
 
-# Ativar ambiente
+# Activate environment
 source venv/bin/activate
 
-# Atualizar pip e instalar uv
+# Update pip and install uv
 pip install --upgrade pip uv
 
-# Instalar dependências
+# Install dependencies
 if [ -f "requirements.txt" ]; then
     uv pip install -r requirements.txt
-    echo "Dependências instaladas com sucesso!"
+    echo "Dependencies installed successfully!"
 else
-    echo "Arquivo requirements.txt não encontrado."
+    echo "requirements.txt file not found."
 fi
 
-echo "Ambiente configurado! Use 'source venv/bin/activate' para ativar."
+echo "Environment configured! Use 'source venv/bin/activate' to activate."
 ```
 
-## 10. Boas Práticas
+## 10. Best Practices
 
-### Checklist de Projeto
+### Project Checklist
 
-- [ ] Usar sempre ambiente virtual
-- [ ] Fixar versão Python com pyenv local
-- [ ] Especificar versões em requirements.txt
-- [ ] Separar dependências (dev, prod, test)
-- [ ] Usar uv para velocidade (quando disponível)
-- [ ] Manter requirements.txt atualizado
-- [ ] Não commitar pasta venv/
-- [ ] Documentar setup no README.md
+- [ ] Always use virtual environment
+- [ ] Fix Python version with pyenv local
+- [ ] Specify versions in requirements.txt
+- [ ] Separate dependencies (dev, prod, test)
+- [ ] Use uv for speed (when available)
+- [ ] Keep requirements.txt updated
+- [ ] Don't commit venv/ folder
+- [ ] Document setup in README.md
 
-### Comandos de Verificação
+### Verification Commands
 
 ```bash
-# Verificar ambiente atual
+# Check current environment
 echo "Python: $(python --version)"
 echo "Pip: $(pip --version)"
-echo "Ambiente: $VIRTUAL_ENV"
-echo "Pacotes: $(pip list | wc -l)"
+echo "Environment: $VIRTUAL_ENV"
+echo "Packages: $(pip list | wc -l)"
 
-# Verificar consistência
+# Check consistency
 pip check
 
-# Auditoria de segurança
-pip-audit  # Instalar com: pip install pip-audit
+# Security audit
+pip-audit  # Install with: pip install pip-audit
 ```
 
-Este guia fornece uma base sólida para gerenciar pacotes Python de forma eficiente e segura.
+This guide provides a solid foundation for managing Python packages efficiently and securely.
