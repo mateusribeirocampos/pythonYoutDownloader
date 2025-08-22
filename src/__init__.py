@@ -1,13 +1,14 @@
 """
-YouTube Video Downloader Package
+Universal Video Downloader Package
 
-A simple and efficient YouTube video downloader using Python and yt-dlp.
+A simple and efficient universal video downloader using Python and yt-dlp.
+Supports YouTube, Vimeo, HLS/DASH streams, and segmented videos.
 """
 
-__version__ = "1.0.0"
-__author__ = "YouTube Downloader Team"
+__version__ = "2.0.0"
+__author__ = "Universal Video Downloader Team"
 __email__ = "contact@example.com"
 
-from .youtube_downloader import download_video, validate_youtube_url
+from .universal_video_downloader import download_video, validate_youtube_url
 
 __all__ = ["download_video", "validate_youtube_url"]

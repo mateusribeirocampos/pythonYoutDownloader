@@ -8,7 +8,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from src.youtube_downloader import (
+from src.universal_video_downloader import (
     test_video_url, 
     download_video, 
     detect_platform, 

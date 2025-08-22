@@ -4,7 +4,7 @@ Test script for segmented video downloads.
 This script demonstrates how to download videos that come in segments/chunks.
 """
 
-from src.youtube_downloader import download_video, test_video_url, detect_platform
+from src.universal_video_downloader import download_video, test_video_url, detect_platform
 
 def test_url(url: str):
     """Test a URL and show its platform detection and accessibility."""

@@ -2,7 +2,7 @@
 
 <div align="center">
   
-![Python Universal Video Downloader](assets/pythonYout.png)
+![Python Universal Video Downloader](assets/video_downloader.png)
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -77,7 +77,7 @@ make install
 
 ```bash
 # Run the interactive downloader
-python src/youtube_downloader.py
+python src/universal_video_downloader.py
 
 # Or use make command
 make run
@@ -128,7 +128,7 @@ youtube-video-downloader/
 │
 ├── 📁 src/                     # Source code
 │   ├── 🔧 __init__.py         # Package initialization
-│   └── 🎯 youtube_downloader.py # Main application
+│   └── 🎯 universal_video_downloader.py # Main application
 │
 ├── 🧪 tests/                  # Test suite
 │   ├── 🔧 __init__.py         # Test package init
@@ -224,7 +224,7 @@ pytest tests/
 ### Core Functions
 
 ```python
-from src.youtube_downloader import download_video, validate_youtube_url
+from src.universal_video_downloader import download_video, validate_youtube_url
 
 # Validate YouTube URL
 is_valid = validate_youtube_url("https://www.youtube.com/watch?v=VIDEO_ID")

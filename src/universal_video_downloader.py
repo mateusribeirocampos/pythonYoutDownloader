@@ -24,10 +24,10 @@ Dependencies:
     - Python 3.8+
 
 Usage:
-    python youtube_downloader.py
+    python universal_video_downloader.py
     
 Or import as module:
-    from youtube_downloader import download_video
+    from universal_video_downloader import download_video
     download_video('https://www.youtube.com/watch?v=VIDEO_ID')
     download_video('https://vimeo.com/123456789')
     download_video('https://example.com/video.m3u8')  # HLS streaming

@@ -156,7 +156,7 @@ if segmented_formats:
 #### Normal Execution
 
 ```bash
-python src/youtube_downloader.py
+python src/universal_video_downloader.py
 ```
 
 #### Testing Problematic URLs
