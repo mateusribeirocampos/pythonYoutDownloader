@@ -147,3 +147,6 @@ dmypy.json
 # OS
 .DS_Store
 Thumbs.db
+# Release process documentation (local only)
+RELEASE_PROCESS.md
+RELEASE_NOTES_*.md

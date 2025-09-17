@@ -25,6 +25,7 @@ This major release introduces **revolutionary YouTube restriction bypass capabil
 - **🔄 Intelligent Fallback** - Cascading strategy system with up to 20 retry attempts per method
 
 ### ⚡ **Enhanced Performance & Reliability**
+
 - **🚀 Enhanced Retry Logic**
 
 - Up to 120 total attempts across all strategies
@@ -37,6 +38,7 @@ This major release introduces **revolutionary YouTube restriction bypass capabil
 ## 🆕 New Functions & APIs
 
 ### Core Functions Added
+
 ```python
 # NEW: Advanced video URL testing with bypass strategies
 test_video_url(url) -> tuple[bool, dict]
@@ -49,6 +51,7 @@ load_cookies_from_browser() -> str
 ```
 
 ### Enhanced Existing Functions
+
 - `download_video()` - Now includes all advanced bypass strategies automatically
 - `validate_youtube_url()` - Enhanced validation with more URL patterns
 - `detect_platform()` - Improved platform detection accuracy
@@ -58,6 +61,7 @@ load_cookies_from_browser() -> str
 ## 🔧 Technical Improvements
 
 ### **Multi-Client Bypass Strategies**
+
 1. **🏆 Browser Cookie + Advanced Headers** - Primary strategy using real browser session
 2. **📱 Android Creator/Music** - Mobile app clients with enhanced permissions
 3. **🍎 iOS Mobile Clients** - Apple device simulation for restricted content
@@ -66,13 +70,18 @@ load_cookies_from_browser() -> str
 6. **⚡ Minimal Fallback** - Last resort extraction method
 
 ### **Cookie Management System**
+
 - **Automatic Detection** - Finds cookies in standard browser locations
 - **Cross-Platform Support** - Works on macOS, Linux, and Windows
 - **Manual Cookie Support** - Accepts exported cookie files
 - **Session Persistence** - Maintains login state across downloads
 
 ### **Network & Retry Enhancements**
-- **Fragment Retries:** Increased to 20 attempts
+
+- **Fragment Retries:**
+
+Increased to 20 attempts
+
 - **Socket Timeout:** Extended to 120 seconds
 - **Connection Retries:** Up to 15 attempts per strategy
 - **Geo-bypass:** Multiple country strategies (US, UK, etc.)
@@ -178,7 +187,9 @@ The enhanced bypass capabilities are designed for legitimate use cases where vid
 ```
 
 ### **Still Can't Download?**
+
 If a video fails after all 6 strategies, it likely has severe restrictions:
+
 - Copyright protection measures
 - Platform-specific blocking
 - Private/unlisted status requiring special access
@@ -197,6 +208,7 @@ pip install -r requirements.txt
 ```
 
 ### **Update from v2.x**
+
 ```bash
 git pull origin main
 pip install -r requirements.txt --upgrade
@@ -208,7 +220,10 @@ pip install -r requirements.txt --upgrade
 ## 🙏 Acknowledgments
 
 Special thanks to:
-- **yt-dlp community** for the excellent foundation
+
+- **yt-dlp community**
+
+for the excellent foundation
 
 - **Beta testers** who helped identify restriction patterns
 - **Contributors** who suggested bypass strategies
@@ -226,9 +241,13 @@ Special thanks to:
 - 🌐 Enhanced proxy rotation
 
 ### **Community Feedback**
+
 Your feedback drives our development! Report issues, suggest features, or contribute code:
+
 - 🐛 [Report Issues](https://github.com/mateusribeirocampos/pythonYoutDownloader/issues)
+
 - 💡 [Suggest Features](https://github.com/mateusribeirocampos/pythonYoutDownloader/discussions)
+
 - 🤝 [Contribute](https://github.com/mateusribeirocampos/pythonYoutDownloader/pulls)
 
 ---
