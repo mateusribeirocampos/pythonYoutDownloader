@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "universal-video-downloader"
-version = "2.0.0"
+version = "3.0.0"
 description = "A simple and efficient universal video downloader using Python and yt-dlp. Supports YouTube, Vimeo, HLS/DASH streams, and segmented videos."
 readme = "README.md"
 requires-python = ">=3.8"

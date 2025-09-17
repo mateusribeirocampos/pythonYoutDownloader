@@ -5,7 +5,7 @@ A simple and efficient universal video downloader using Python and yt-dlp.
 Supports YouTube, Vimeo, HLS/DASH streams, and segmented videos.
 """
 
-__version__ = "2.0.0"
+__version__ = "3.0.0"
 __author__ = "Universal Video Downloader Team"
 __email__ = "contact@example.com"
 

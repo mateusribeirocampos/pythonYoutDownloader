@@ -35,13 +35,25 @@
 - **🛡️ Robust Error Handling** - Comprehensive error management and user feedback
 - **🏗️ Professional Architecture** - Clean, maintainable, and tested codebase
 
-### 🆕 New in v2.0
+### 🆕 New in v3.0 - Advanced Bypass Edition
+
 - **🔗 Chunked/Segmented Video Downloads** - Handle videos delivered in chunks/fragments
 - **🌐 Generic URL Support** - Download from any video URL with embedded content
 - **⚡ Enhanced Streaming** - Optimized for HLS (.m3u8) and DASH (.mpd) formats
 - **🔍 Smart Detection** - Automatic platform and format detection
 - **📦 Vimeo CDN Support** - Download individual chunks from Vimeo CDN URLs
 - **🎯 Embed Page Support** - Extract videos from embed pages automatically
+
+### 🛡️ NEW: Advanced Restriction Bypass System
+
+- **🍪 Auto Cookie Detection** - Automatically extracts cookies from Chrome, Safari, Firefox
+- **📱 Multiple User Agents** - Android, iOS, Smart TV, and Web clients for maximum compatibility
+- **🌍 Geo-Restriction Bypass** - Multiple country bypass strategies
+- **🔓 Age-Restriction Bypass** - Advanced techniques to access age-restricted content
+- **🔄 Multi-Client Fallback** - 6+ different client strategies in cascade
+- **🚀 Enhanced Retry Logic** - Up to 20 attempts per video with intelligent fallbacks
+- **⚙️ YouTube API Optimization** - Latest InnerTube API configurations
+- **🔐 Authentication Support** - Automatic login state detection and cookie management
 
 ---
 
@@ -224,10 +236,23 @@ pytest tests/
 ### Core Functions
 
 ```python
-from src.universal_video_downloader import download_video, validate_youtube_url
+from src.universal_video_downloader import (
+    download_video,
+    validate_youtube_url,
+    test_video_url,
+    get_advanced_youtube_config
+)
 
 # Validate YouTube URL
 is_valid = validate_youtube_url("https://www.youtube.com/watch?v=VIDEO_ID")
+
+# Test video accessibility with advanced bypass (NEW!)
+success, info = test_video_url("https://www.youtube.com/watch?v=VIDEO_ID")
+if success:
+    print(f"✅ Video accessible: {info['title']}")
+    print(f"⏱️ Duration: {info['duration']} seconds")
+else:
+    print(f"❌ Error: {info['suggestion']}")
 
 # Download video (supports YouTube, Vimeo, HLS, and segmented videos)
 success = download_video(
@@ -242,16 +267,84 @@ success = download_video(
     output_path="./downloads",
     format_selector="best"  # Automatically handles HLS/DASH formats
 )
+
+# Advanced configuration with custom settings (NEW!)
+advanced_config = get_advanced_youtube_config(
+    cookies_path="/path/to/cookies.txt",  # Optional: Manual cookies
+    proxy="http://proxy:8080"            # Optional: Proxy server
+)
+```
+
+### Advanced Bypass Strategies (NEW!)
+
+The downloader now automatically employs multiple advanced strategies:
+
+#### 🍪 **Cookie Management**
+
+```python
+# Automatic browser cookie extraction
+# - Chrome: ~/Library/Application Support/Google/Chrome/Default/Cookies
+# - Safari: ~/Library/Containers/com.apple.Safari/Data/Library/Cookies/
+# - Firefox: ~/.mozilla/firefox/profiles/*/cookies.sqlite
+
+# Manual cookie support
+# 1. Export cookies from browser using extensions
+# 2. Save as cookies.txt file
+# 3. Pass to advanced config
+```
+
+#### 📱 **Multi-Client Strategy**
+
+```python
+# Client Priority Order (Automatic):
+# 1. 🏆 Browser Cookie + Advanced Headers
+# 2. 📱 Android Creator/Music clients
+# 3. 🍎 iOS mobile clients
+# 4. 📺 Smart TV embedded clients
+# 5. 🌐 Standard web clients
+# 6. ⚡ Minimal fallback
+
+# Each client has specific User-Agents and API configs
+# Bypasses different types of restrictions
+```
+
+#### 🌍 **Geographic & Age Bypass**
+
+```python
+# Geographic Bypass:
+# - Multiple country IP masking (US, UK, etc.)
+# - Regional header spoofing
+# - DNS bypass techniques
+
+# Age Restriction Bypass:
+# - Embedded player extraction
+# - Client combinations that skip age verification
+# - Authentication-free access methods
+```
+
+#### ⚡ **Enhanced Retry Logic**
+
+```python
+# Retry Configuration:
+# - Up to 6 different client strategies
+# - 20 retry attempts per strategy
+# - Fragment retries: 20 attempts
+# - Socket timeout: 120 seconds
+# - Intelligent error classification and fallback
 ```
 
 ### Configuration Options
 
 ```python
 # yt-dlp format selectors
-'best'                    # Best quality available
+'best'                    # Best quality available (with advanced bypass)
 'best[height<=720]'       # Max 720p quality
 'best[height<=1080]'      # Max 1080p quality
 'worst'                   # Lowest quality
+
+# Advanced format options (NEW!)
+'best[ext=mp4]'          # Best MP4 format
+'best[height<=720][ext=mp4]'  # 720p MP4 specifically
 ```
 
 ---
@@ -313,6 +406,68 @@ We welcome contributions! Please follow these steps:
 | `Permission denied` when creating directory | Check write permissions or run with appropriate privileges |
 | `Video unavailable` | Check if video is public and accessible in your region |
 | `Invalid URL` error | Ensure URL follows YouTube format patterns |
+
+### 🆕 Advanced Troubleshooting (Restriction Bypass)
+
+#### 🔐 Authentication Required Errors
+
+```bash
+# Error: "Please sign in. Use --cookies-from-browser"
+# Solution: The downloader automatically tries to extract cookies, but you can:
+
+# 1. Make sure you're logged into YouTube in your browser
+# 2. Close browser completely, then try downloading
+# 3. For manual cookie export:
+#    - Install browser extension: "Get cookies.txt LOCALLY"
+#    - Export YouTube cookies to cookies.txt
+#    - Place file in project directory
+```
+
+#### 🚫 "Content not available on this app" Errors
+
+```bash
+# The downloader now tries 6 different bypass strategies automatically:
+# ✅ Strategy 1: Browser cookies + Advanced headers
+# ✅ Strategy 2: Android Creator/Music clients
+# ✅ Strategy 3: iOS mobile clients
+# ✅ Strategy 4: Smart TV embedded clients
+# ✅ Strategy 5: Standard web clients
+# ✅ Strategy 6: Minimal fallback
+
+# If ALL strategies fail, the video likely has severe restrictions:
+# - Copyright protection
+# - Region blocking (even with bypass)
+# - Private/unlisted status
+# - Platform-specific blocking
+```
+
+#### 🌍 Geographic Restrictions
+
+```bash
+# The downloader includes multiple geo-bypass methods:
+# - IP masking (US/UK regions)
+# - DNS bypass techniques
+# - Regional header spoofing
+
+# For additional geographic bypass:
+# 1. Try different times of day
+# 2. Use a VPN service
+# 3. Check if video is region-locked permanently
+```
+
+#### ⚠️ Age-Restricted Content
+
+```bash
+# Advanced age bypass strategies are automatic:
+# - Embedded player extraction
+# - Client combinations that skip verification
+# - Authentication-free methods
+
+# If age bypass fails:
+# 1. Ensure you're logged into YouTube (18+ account)
+# 2. Try manual cookie export (see above)
+# 3. Some content may require explicit age verification
+```
 
 ### Getting Help
 

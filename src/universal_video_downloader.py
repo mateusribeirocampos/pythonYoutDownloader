@@ -39,7 +39,127 @@ Date: 2025
 import yt_dlp
 import os
 import re
+import json
 from urllib.parse import urlparse
+from pathlib import Path
+
+def load_cookies_from_browser() -> str:
+    """
+    Attempts to find and load cookies from common browser locations.
+
+    Returns:
+        str: Path to cookies file if found, None otherwise
+    """
+    # Common browser cookie locations
+    home = Path.home()
+    cookie_paths = [
+        # Chrome/Chromium on macOS
+        home / 'Library/Application Support/Google/Chrome/Default/Cookies',
+        home / 'Library/Application Support/Chromium/Default/Cookies',
+        # Chrome on Linux
+        home / '.config/google-chrome/Default/Cookies',
+        home / '.config/chromium/Default/Cookies',
+        # Firefox on macOS
+        home / 'Library/Application Support/Firefox/Profiles',
+        # Firefox on Linux
+        home / '.mozilla/firefox',
+    ]
+
+    for path in cookie_paths:
+        if path.exists():
+            if 'Firefox' in str(path) or 'firefox' in str(path):
+                # For Firefox, need to find the profile directory
+                if path.is_dir():
+                    for profile_dir in path.iterdir():
+                        if profile_dir.is_dir() and 'default' in profile_dir.name.lower():
+                            cookies_db = profile_dir / 'cookies.sqlite'
+                            if cookies_db.exists():
+                                return str(cookies_db)
+            else:
+                # For Chrome/Chromium
+                return str(path)
+
+    return None
+
+def get_advanced_youtube_config(cookies_path: str = None, proxy: str = None) -> dict:
+    """
+    Creates an advanced yt-dlp configuration for bypassing YouTube restrictions.
+
+    Args:
+        cookies_path (str): Path to cookies file
+        proxy (str): Proxy URL (http://user:pass@host:port)
+
+    Returns:
+        dict: Advanced yt-dlp configuration
+    """
+    config = {
+        'quiet': True,
+        'no_warnings': True,
+        'extract_flat': False,
+
+        # Advanced HTTP headers mimicking real browser
+        'http_headers': {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Connection': 'keep-alive',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-CH-UA': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
+            'Sec-CH-UA-Mobile': '?0',
+            'Sec-CH-UA-Platform': '"Windows"',
+        },
+
+        # Advanced YouTube extractor arguments
+        'extractor_args': {
+            'youtube': {
+                'player_client': ['android_creator', 'android_music', 'android', 'web', 'ios', 'tv_embedded'],
+                'player_skip': ['configs', 'webpage'],
+                'skip': [],  # Don't skip any formats
+                'innertube_api_version': '1.20220908.01.00',
+                'innertube_context_client_name': '1',
+                'innertube_context_client_version': '2.20220908.01.00'
+            }
+        },
+
+        # Network and retry options
+        'retries': 15,
+        'fragment_retries': 20,
+        'extractor_retries': 10,
+        'file_access_retries': 10,
+        'socket_timeout': 120,
+
+        # Geo-blocking bypass
+        'geo_bypass': True,
+        'geo_bypass_country': 'US',
+        'geo_bypass_ip_block': None,
+
+        # Additional options
+        'prefer_insecure': False,
+        'no_check_certificate': False,
+    }
+
+    # Add cookies if available
+    if cookies_path and os.path.exists(cookies_path):
+        config['cookiefile'] = cookies_path
+        print(f"🍪 Using cookies from: {cookies_path}")
+    else:
+        # Try to auto-detect cookies
+        auto_cookies = load_cookies_from_browser()
+        if auto_cookies:
+            config['cookiefile'] = auto_cookies
+            print(f"🍪 Auto-detected cookies: {auto_cookies}")
+
+    # Add proxy if specified
+    if proxy:
+        config['proxy'] = proxy
+        print(f"🌐 Using proxy: {proxy}")
+
+    return config
 
 def _progress_hook(d):
     """
@@ -733,53 +853,159 @@ def get_user_output_directory() -> str:
 def test_video_url(url: str) -> tuple[bool, dict]:
     """
     Tests if a video URL is accessible and extractable by yt-dlp.
-    Uses multiple fallback methods for problematic videos.
-    
+    Uses multiple fallback methods for problematic videos including advanced bypass techniques.
+
     Args:
         url (str): Video URL to test
-        
+
     Returns:
         tuple[bool, dict]: (Success status, video info dict)
     """
-    # Multiple configurations to try in order
+    # Multiple configurations to try in order - from most advanced to basic
     test_configs = [
-        # Standard configuration
+        # Ultra-advanced configuration with browser cookie extraction
         {
             'quiet': True,
             'no_warnings': True,
             'extract_flat': False,
-        },
-        # Enhanced configuration with headers
-        {
-            'quiet': True,
-            'no_warnings': True,
-            'extract_flat': False,
+            'cookiesfrombrowser': ('chrome',),  # Try Chrome cookies first
             'http_headers': {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Accept-Language': 'en-US,en;q=0.5',
-                'Accept-Encoding': 'gzip, deflate',
-                'Connection': 'keep-alive',
-            }
-        },
-        # Configuration for chunked/segmented videos
-        {
-            'quiet': True,
-            'no_warnings': True,
-            'extract_flat': False,
-            'http_headers': {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate, br',
             },
-            'hls_prefer_native': True,
-            'hls_use_mpegts': False,
-            'fragment_retries': 3,
-            'extractor_retries': 3,
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['android_creator', 'android_music', 'android', 'web', 'ios', 'tv_embedded'],
+                    'player_skip': ['configs', 'webpage'],
+                    'skip': [],
+                    'innertube_api_version': '1.20220908.01.00'
+                }
+            },
+            'retries': 15,
+            'fragment_retries': 20,
+            'geo_bypass': True,
+            'age_limit': None,
         },
-        # Minimal configuration for restrictive sites
+
+        # Try Safari cookies if on macOS
         {
             'quiet': True,
             'no_warnings': True,
-            'extract_flat': True,  # Try flat extraction for problematic videos
+            'extract_flat': False,
+            'cookiesfrombrowser': ('safari',),
+            'http_headers': {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
+            },
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['android', 'ios'],
+                }
+            },
+            'retries': 10,
+            'geo_bypass': True,
+        },
+
+        # Ultra-advanced configuration without cookies
+        get_advanced_youtube_config(),
+
+        # Mobile Android client (often less restricted)
+        {
+            'quiet': True,
+            'no_warnings': True,
+            'extract_flat': False,
+            'http_headers': {
+                'User-Agent': 'com.google.android.youtube/17.31.35 (Linux; U; Android 11) gzip',
+                'X-YouTube-Client-Name': '3',
+                'X-YouTube-Client-Version': '17.31.35',
+            },
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['android'],
+                    'innertube_api_version': '1.20220908.01.00'
+                }
+            },
+            'retries': 10,
+            'fragment_retries': 15,
+            'geo_bypass': True,
+        },
+
+        # iOS client bypass (Apple devices often less restricted)
+        {
+            'quiet': True,
+            'no_warnings': True,
+            'extract_flat': False,
+            'http_headers': {
+                'User-Agent': 'com.google.ios.youtube/17.33.2 (iPhone14,3; U; CPU iOS 15_6 like Mac OS X)',
+                'X-YouTube-Client-Name': '5',
+                'X-YouTube-Client-Version': '17.33.2',
+            },
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['ios'],
+                }
+            },
+            'retries': 10,
+            'geo_bypass': True,
+        },
+
+        # TV/Smart TV client (often bypasses many restrictions)
+        {
+            'quiet': True,
+            'no_warnings': True,
+            'extract_flat': False,
+            'http_headers': {
+                'User-Agent': 'Mozilla/5.0 (SMART-TV; LINUX; Tizen 2.4.0) AppleWebKit/538.1 (KHTML, like Gecko) Version/2.4.0 TV Safari/538.1',
+            },
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['tv_embedded'],
+                }
+            },
+            'retries': 10,
+            'geo_bypass': True,
+        },
+
+        # Age-restricted bypass attempt
+        {
+            'quiet': True,
+            'no_warnings': True,
+            'extract_flat': False,
+            'http_headers': {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+            },
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['android_embedded'],
+                    'skip': ['dash', 'hls']
+                }
+            },
+            'age_limit': None,  # Try to bypass age restrictions
+            'retries': 5,
+        },
+
+        # Standard web configuration with enhanced settings
+        {
+            'quiet': True,
+            'no_warnings': True,
+            'extract_flat': False,
+            'http_headers': {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+            },
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['web']
+                }
+            },
+            'retries': 5,
+        },
+
+        # Minimal fallback
+        {
+            'quiet': True,
+            'no_warnings': True,
+            'extract_flat': True,
         }
     ]
     
@@ -856,7 +1082,7 @@ def download_video(url: str, output_path: str = '.', format_selector: str = 'bes
         bool: True if download was successful, False otherwise
         
     Example:
-        >>> download_video('https://www.youtube.com/watch?v=-oBfkrpqW1M')
+        >>> download_video('https://www.youtube.com/watch?v=EXAMPLE_VIDEO')
         True
         
         >>> download_video('https://vimeo.com/123456789')
@@ -888,58 +1114,73 @@ def download_video(url: str, output_path: str = '.', format_selector: str = 'bes
     ydl_opts = {
         # Format: use the provided format selector
         'format': format_selector,
-        
+
         # File name template: uses video title (sanitized)
         'outtmpl': os.path.join(output_path, '%(title).200s.%(ext)s'),
-        
+
         # Enhanced options for segmented/chunked videos
         'extractaudio': False,          # Keep video (don't extract audio only)
         'audioformat': 'mp3',           # Audio format if extracting
         'embed_subs': True,             # Embed subtitles if available
         'writesubtitles': False,        # Don't save subtitles as separate file
         'ignoreerrors': False,          # Stop on error
-        
+
         # Advanced fragment/segment handling options
         'fragment_retries': 15,         # Increased retries for fragments
         'skip_unavailable_fragments': False,  # Don't skip missing fragments
         'keep_fragments': False,        # Delete fragments after merging
         'abort_on_unavailable_fragment': True,  # Stop if fragment is missing
-        
+
         # Enhanced network and download options
         'retries': 10,                  # Retry failed downloads
         'file_access_retries': 5,       # More file access retries
         'socket_timeout': 60,           # Longer socket timeout for slow connections
         'http_chunk_size': 10485760,    # 10MB chunks for better handling
         'concurrent_fragment_downloads': 1,  # Sequential for stability with chunks
-        
-        # HTTP headers optimized for chunked videos and Vimeo CDN
+
+        # HTTP headers optimized for chunked videos and YouTube/Vimeo compatibility
         'http_headers': {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36',
-            'Accept': '*/*',
-            'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.9',
             'Accept-Encoding': 'gzip, deflate, br',
             'Connection': 'keep-alive',
-            'Sec-CH-UA': '"Chromium";v="139", "Not;A=Brand";v="99"',
+            'Sec-CH-UA': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
             'Sec-CH-UA-Mobile': '?0',
-            'Sec-CH-UA-Platform': '"macOS"',
-            'Sec-Fetch-Dest': 'empty',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Site': 'cross-site',
-            'Referer': 'https://player.vimeo.com/',
+            'Sec-CH-UA-Platform': '"Windows"',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'Upgrade-Insecure-Requests': '1',
         },
-        
+
         # HLS/DASH specific options for chunked videos
         'hls_prefer_native': True,      # Use native HLS downloader
         'hls_use_mpegts': False,        # Don't use mpegts container for HLS
         'extractor_retries': 5,         # Retry extractor operations
-        
+
         # Progress hooks for better user feedback
         'progress_hooks': [_progress_hook],
-        
+
         # Additional options for problematic videos
         'geo_bypass': True,             # Try to bypass geo-restrictions
         'geo_bypass_country': 'US',     # Use US as bypass country
         'no_check_certificate': False,  # Verify SSL certificates (keep secure)
+
+        # YouTube-specific anti-restriction measures
+        'extractor_args': {
+            'youtube': {
+                'player_client': ['android', 'web'],
+                'skip': ['dash', 'hls'] if 'best' in format_selector else []
+            }
+        },
+
+        # Additional bypass options
+        'writeautomaticsub': False,
+        'writesubtitles': False,
+        'ignoreerrors': False,
+        'no_warnings': False,
     }
     
     # Validate if output directory exists
