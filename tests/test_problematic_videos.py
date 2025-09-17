@@ -24,12 +24,12 @@ def test_problematic_urls():
     # Test cases for different error types
     test_cases = [
         {
-            'url': 'https://player.vimeo.com/video/1086259836',
+            'url': 'https://player.vimeo.com/video/EXAMPLE_ID',
             'description': 'Vimeo Embed URL (OAuth issues)',
             'expected_error': 'oauth_error'
         },
         {
-            'url': 'https://vimeo.com/1086259836', 
+            'url': 'https://vimeo.com/EXAMPLE_ID', 
             'description': 'Direct Vimeo URL (same video)',
             'expected_error': 'oauth_error'
         },
