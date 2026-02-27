@@ -41,8 +41,55 @@ import os
 import re
 import json
 import shutil
+import subprocess
+import sys
+from datetime import datetime, timedelta
 from urllib.parse import urlparse
 from pathlib import Path
+
+def _check_and_update_ytdlp() -> None:
+    """
+    Checks for yt-dlp updates once a week using a timestamp cache file.
+    Uses ~/.cache/ytdlp_last_update to avoid checking on every run.
+    """
+    cache_file = Path.home() / '.cache' / 'ytdlp_last_update'
+    update_interval = timedelta(days=7)
+
+    should_update = True
+    if cache_file.exists():
+        try:
+            last_check = datetime.fromisoformat(cache_file.read_text().strip())
+            if datetime.now() - last_check < update_interval:
+                should_update = False
+        except (ValueError, OSError):
+            pass
+
+    if not should_update:
+        return
+
+    print("🔄 Checking for yt-dlp updates (weekly check)...")
+    try:
+        result = subprocess.run(
+            [sys.executable, '-m', 'pip', 'install', '--upgrade', 'yt-dlp', '--quiet'],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        if result.returncode == 0:
+            import importlib.metadata
+            version = importlib.metadata.version('yt-dlp')
+            print(f"✅ yt-dlp up to date (v{version})")
+        else:
+            print(f"⚠️  Could not update yt-dlp: {result.stderr.strip()}")
+    except Exception as e:
+        print(f"⚠️  Update check failed (continuing anyway): {e}")
+    finally:
+        try:
+            cache_file.parent.mkdir(parents=True, exist_ok=True)
+            cache_file.write_text(datetime.now().isoformat())
+        except OSError:
+            pass
+
 
 def load_cookies_from_browser() -> str:
     """
@@ -1171,7 +1218,9 @@ def main() -> None:
     print("🎯 Supports: YouTube, Vimeo, HLS/DASH streams, Direct videos")
     print("🔗 Handles segmented/chunked videos automatically")
     print("=" * 60)
-    
+
+    _check_and_update_ytdlp()
+
     try:
         # Step 1: Get and validate video URL
         print("\n🔸 STEP 1: Video URL")

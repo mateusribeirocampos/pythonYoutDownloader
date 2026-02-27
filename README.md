@@ -31,6 +31,7 @@
 - **📊 Video Information** - Display title, duration, views, and channel info
 - **🔄 Retry Mechanism** - Automatic retry for failed segments and downloads
 - **📈 Progress Tracking** - Real-time progress for both regular and segmented downloads
+- **⬆️ Auto-Update** - yt-dlp updates automatically once a week at startup (no manual action needed)
 - **✅ URL Testing** - Pre-download validation to ensure video accessibility
 - **🛡️ Robust Error Handling** - Comprehensive error management and user feedback
 - **🏗️ Professional Architecture** - Clean, maintainable, and tested codebase
@@ -61,8 +62,23 @@
 
 ### Prerequisites
 
-- **Python 3.8+** - [Download Python](https://python.org/downloads/)
-- **Git** - [Install Git](https://git-scm.com/downloads)
+- **pyenv** - Python version manager (ensures Python 3.12.6 is used)
+  - macOS: `brew install pyenv` → add `eval "$(pyenv init -)"` to `~/.zshrc`
+  - Windows: `winget install pyenv-win.pyenv-win` → restart terminal (PATH set automatically)
+  - Arch Linux: `yay -S pyenv` → add `eval "$(pyenv init -)"` to `~/.bashrc`
+- **Python 3.12.6** - Managed automatically by pyenv via `.python-version` file
+- **Node.js** - Required for YouTube n-challenge solving (yt-dlp 2026+)
+  - macOS: `brew install node`
+  - Windows: `winget install OpenJS.NodeJS`
+  - Arch Linux: `sudo pacman -S nodejs npm`
+- **ffmpeg** - Recommended for merging video/audio streams
+  - macOS: `brew install ffmpeg`
+  - Windows: `winget install Gyan.FFmpeg`
+  - Arch Linux: `sudo pacman -S ffmpeg`
+- **Git**
+  - macOS: `brew install git`
+  - Windows: `winget install Git.Git`
+  - Arch Linux: `sudo pacman -S git`
 
 ### Installation
 
@@ -71,28 +87,47 @@
 git clone https://github.com/mateusribeirocampos/pythonYoutDownloader.git
 cd pythonYoutDownloader
 
+# pyenv automatically activates Python 3.12.6 (reads .python-version)
+# Verify with:
+python --version  # should print Python 3.12.6
+
 # Create virtual environment
 python -m venv venv
+```
 
-# Activate virtual environment
-# On macOS/Linux:
+**Activate virtual environment:**
+
+```bash
+# macOS / Arch Linux
 source venv/bin/activate
-# On Windows:
-# venv\\Scripts\\activate
 
-# Install dependencies
+# Windows (PowerShell)
+venv\Scripts\Activate.ps1
+
+# Windows (Command Prompt)
+venv\Scripts\activate.bat
+```
+
+**Install dependencies:**
+
+```bash
+# macOS / Arch Linux (using make)
 make install
-# Or manually: pip install -r requirements.txt
+
+# Windows (make not available natively — use pip directly)
+pip install -r requirements.txt
 ```
 
 ### Usage
 
 ```bash
-# Run the interactive downloader
+# macOS / Arch Linux
 python src/universal_video_downloader.py
-
-# Or use make command
+# or
 make run
+
+# Windows
+python src\universal_video_downloader.py
 ```
 
 ---
@@ -165,24 +200,29 @@ youtube-video-downloader/
 
 ### Setup Development Environment
 
+**macOS / Arch Linux:**
+
 ```bash
-# Install development dependencies
-make install-dev
-
-# Run tests
-make test
-
-# Format code
-make format
-
-# Run linting
-make lint
-
-# Type checking
-make type-check
+make install-dev  # install dev dependencies
+make test         # run tests
+make format       # format code
+make lint         # run linting
+make type-check   # type checking
+make clean        # clean build artifacts
 ```
 
-### Available Make Commands
+**Windows (PowerShell — `make` not available natively):**
+
+```powershell
+pip install -r requirements-dev.txt          # install dev dependencies
+python -m pytest tests/ -v                   # run tests
+black src/ tests/                            # format code
+flake8 src/ tests/                           # run linting
+mypy src/                                    # type checking
+Remove-Item -Recurse -Force build/, dist/    # clean build artifacts
+```
+
+### Available Make Commands (macOS / Arch Linux)
 
 | Command | Description |
 |---------|-------------|
@@ -195,6 +235,8 @@ make type-check
 | `make type-check` | Run mypy type checking |
 | `make clean` | Clean build artifacts |
 | `make build` | Build distribution package |
+
+> **Windows tip:** Install `make` via Scoop (`scoop install make`) or use the manual commands above.
 
 ---
 
@@ -385,7 +427,7 @@ We welcome contributions! Please follow these steps:
 
 ### Runtime Dependencies
 
-- `yt-dlp>=2023.1.6` - YouTube video downloading
+- `yt-dlp>=2026.2.21` - YouTube video downloading (auto-updated weekly at startup)
 
 ### Development Dependencies
 
@@ -406,6 +448,9 @@ We welcome contributions! Please follow these steps:
 | `Permission denied` when creating directory | Check write permissions or run with appropriate privileges |
 | `Video unavailable` | Check if video is public and accessible in your region |
 | `Invalid URL` error | Ensure URL follows YouTube format patterns |
+| `python` not found (Windows) | Use `py` instead: `py src\universal_video_downloader.py` |
+| `venv\Scripts\Activate.ps1 cannot be loaded` (Windows) | Run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` in PowerShell |
+| `node` not found after install (Windows) | Restart terminal so PATH updates take effect |
 
 ### 🆕 Advanced Troubleshooting (Restriction Bypass)
 
